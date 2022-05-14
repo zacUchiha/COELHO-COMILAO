@@ -13,6 +13,12 @@ var ground;
 var rope;
 var fruit;
 var link;
+var backgroundImg;
+
+function preload(){
+  
+}
+
 function setup() 
 {
   // espaço do jogo 
@@ -33,10 +39,19 @@ function setup()
   rectMode(CENTER);
   ellipseMode(RADIUS);
   
-  textSize(50)
+  // size == tamanho
+  // define o tamanho do texto
+  textSize(50);
+
+  // criando um objeto da classe rope
+  // primeiro parâmetro é número de retangulos
+  // o segundo é a posição inical da corda
   rope = new Rope(7, {x: 245, y:30});
+  //criando um corpo circular
   fruit = Bodies.circle(300, 300, 20);
+  // adicionando o fruta a composição
   Composite.add(rope.body, fruit);
+  // criando um objeto da classe link
   link = new Link(rope, fruit);
 }
 
@@ -45,7 +60,10 @@ function draw()
   background(51);
   // aparecer o solo
   ground.show();
+  // aparecer a rope
   rope.show();
+  // atualizando a engine (motor)
   Engine.update(engine);
-   ellipse(fruit.position.x, fruit.position.y, 20, 20);
+  // cria um forma oval ou circular 
+  ellipse(fruit.position.x, fruit.position.y, 20, 20);
 }
