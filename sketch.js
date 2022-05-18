@@ -14,9 +14,13 @@ var rope;
 var fruit;
 var link;
 var backgroundImg;
-
+var fruitImg;
+var bunny;
+var bunnyImg;
 function preload(){
-  
+ backgroundImg = loadImage("images/background.png");
+ fruitImg = loadImage("images/melancia.png");
+ bunnyImg = loadImage("images/eat_0.png")
 }
 
 function setup() 
@@ -53,17 +57,26 @@ function setup()
   Composite.add(rope.body, fruit);
   // criando um objeto da classe link
   link = new Link(rope, fruit);
+  bunny = createSprite(250,420,40,40);
+  bunny.addImage(bunnyImg);
+  bunny.scale = 0.2
 }
 
 function draw() 
 {
   background(51);
+  image(backgroundImg,0,0,500,500);
   // aparecer o solo
   ground.show();
   // aparecer a rope
   rope.show();
   // atualizando a engine (motor)
   Engine.update(engine);
-  // cria um forma oval ou circular 
-  ellipse(fruit.position.x, fruit.position.y, 20, 20);
+  // cria uma image de melancia
+  // usa a posiçao x e y do corpo fisico da fruta
+  push();
+  imageMode(CENTER);
+  image(fruitImg,fruit.position.x, fruit.position.y, 50, 50);
+  pop();
+  drawSprites();
 }
