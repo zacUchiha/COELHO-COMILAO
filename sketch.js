@@ -17,6 +17,7 @@ var backgroundImg;
 var fruitImg;
 var bunny;
 var bunnyImg;
+var cutBtn;
 function preload(){
  backgroundImg = loadImage("images/background.png");
  fruitImg = loadImage("images/melancia.png");
@@ -59,7 +60,12 @@ function setup()
   link = new Link(rope, fruit);
   bunny = createSprite(250,420,40,40);
   bunny.addImage(bunnyImg);
-  bunny.scale = 0.2
+  bunny.scale = 0.2;
+
+  cutBtn = createImg("./images/cut_btn.png");
+  cutBtn.position(230, 20);
+  cutBtn.size(50,50);
+  cutBtn.mouseClicked(drop);
 }
 
 function draw() 
@@ -79,4 +85,12 @@ function draw()
   image(fruitImg,fruit.position.x, fruit.position.y, 50, 50);
   pop();
   drawSprites();
+}
+
+
+function drop() {
+  rope.break();
+  link.detach();
+  // null == nulo
+  link = null;
 }
