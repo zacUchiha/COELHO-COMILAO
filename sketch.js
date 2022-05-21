@@ -18,10 +18,15 @@ var fruitImg;
 var bunny;
 var bunnyImg;
 var cutBtn;
+var blink;
+var eat;
 function preload(){
  backgroundImg = loadImage("images/background.png");
  fruitImg = loadImage("images/melancia.png");
- bunnyImg = loadImage("images/eat_0.png")
+//  bunnyImg = loadImage("images/eat_0.png");
+ blink = loadAnimation("images/blink_1.png","images/blink_1.png", "images/blink_1.png", "images/blink_1.png", "images/blink_1.png", "images/blink_2.png", "images/blink_3.png");
+ eat = loadAnimation("images/eat_0.png","images/eat_1.png","images/eat_2.png","images/eat_3.png","images/eat_4.png");
+ eat.looping = false;
 }
 
 function setup() 
@@ -58,8 +63,10 @@ function setup()
   Composite.add(rope.body, fruit);
   // criando um objeto da classe link
   link = new Link(rope, fruit);
+  blink.frameDelay = 20;
   bunny = createSprite(250,420,40,40);
-  bunny.addImage(bunnyImg);
+  bunny.addAnimation("piscando", blink);
+  bunny.addAnimation("comendo", eat);
   bunny.scale = 0.2;
 
   cutBtn = createImg("./images/cut_btn.png");
@@ -80,17 +87,46 @@ function draw()
   Engine.update(engine);
   // cria uma image de melancia
   // usa a posiçao x e y do corpo fisico da fruta
-  push();
-  imageMode(CENTER);
-  image(fruitImg,fruit.position.x, fruit.position.y, 50, 50);
-  pop();
+  
+
+  // so vamos mostrar a fruta se ela existir
+  if(fruit) {
+    push();
+    imageMode(CENTER);
+    // colocando a imagem no corpo fisico da fruta
+    image(fruitImg,fruit.position.x, fruit.position.y, 50, 50);
+    pop();
+  }
+
+
+  if(collide(fruit,bunny, 80)) {
+    // trocando a animação
+    bunny.changeAnimation("comendo");
+    World.remove(world, fruit);
+    fruit = null;
+  }
   drawSprites();
 }
 
-
+// soltando a fruta da corda
 function drop() {
+  // quebrando a corda
   rope.break();
+  // tira a restrição
   link.detach();
   // null == nulo
   link = null;
+}
+
+function collide(corpoA, corpoB, distancia) {
+  if(corpoA != null && corpoB != null) {
+    // o dist é uma função que calcula a distancia entre dois pontos
+    var diferenca = dist(corpoA.position.x, corpoA.position.y,corpoB.position.x, corpoB.position.y );
+    // dentro do parenteses fica a condição
+    if (diferenca <= distancia) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
