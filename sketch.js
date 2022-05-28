@@ -20,6 +20,9 @@ var bunnyImg;
 var cutBtn;
 var blink;
 var eat;
+var backgroundSound;
+var muteButton;
+var ballonButton;
 function preload(){
  backgroundImg = loadImage("images/background.png");
  fruitImg = loadImage("images/melancia.png");
@@ -27,6 +30,8 @@ function preload(){
  blink = loadAnimation("images/blink_1.png","images/blink_1.png", "images/blink_1.png", "images/blink_1.png", "images/blink_1.png", "images/blink_2.png", "images/blink_3.png");
  eat = loadAnimation("images/eat_0.png","images/eat_1.png","images/eat_2.png","images/eat_3.png","images/eat_4.png");
  eat.looping = false;
+ backgroundSound = loadSound("sound/sound1.mp3");
+ 
 }
 
 function setup() 
@@ -64,7 +69,7 @@ function setup()
   // criando um objeto da classe link
   link = new Link(rope, fruit);
   blink.frameDelay = 20;
-  bunny = createSprite(250,420,40,40);
+  bunny = createSprite(400,420,40,40);
   bunny.addAnimation("piscando", blink);
   bunny.addAnimation("comendo", eat);
   bunny.scale = 0.2;
@@ -73,6 +78,37 @@ function setup()
   cutBtn.position(230, 20);
   cutBtn.size(50,50);
   cutBtn.mouseClicked(drop);
+  backgroundSound.play();
+
+  // image -> img
+  muteButton = createImg("images/mute.png");
+  // x, y
+  muteButton.position(450,20);
+  // largura e altura
+  muteButton.size(50,50);
+  // quando houver um evento de clique no mutebutton vamos chamar a funçao mute
+  muteButton.mouseClicked(mute);
+  ballonButton = createImg("images/balloon.png");;
+  ballonButton.position(10,250);
+  ballonButton.size(150,100);
+  ballonButton.mouseClicked(air);
+}
+
+function air() {
+  // aplicar força
+  // corpo -> fruit
+  // posição da aplicação da força
+  // valor da força x ou/e y
+  Matter.Body.applyForce(fruit, {x:0, y:0}, {x:0.01, y:0});
+}
+
+function mute() {
+  // play -> jogar, tocando
+  if(backgroundSound.isPlaying()) {
+    backgroundSound.stop();
+  } else {
+    backgroundSound.play();
+  }
 }
 
 function draw() 
@@ -118,6 +154,7 @@ function drop() {
   link = null;
 }
 
+// sprite.collide = do sprite
 function collide(corpoA, corpoB, distancia) {
   if(corpoA != null && corpoB != null) {
     // o dist é uma função que calcula a distancia entre dois pontos
