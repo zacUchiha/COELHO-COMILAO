@@ -23,6 +23,10 @@ var eat;
 var backgroundSound;
 var muteButton;
 var ballonButton;
+var bunnySad;
+var rope2;
+var link2;
+var cutBtn2;
 function preload(){
  backgroundImg = loadImage("images/background.png");
  fruitImg = loadImage("images/melancia.png");
@@ -31,7 +35,8 @@ function preload(){
  eat = loadAnimation("images/eat_0.png","images/eat_1.png","images/eat_2.png","images/eat_3.png","images/eat_4.png");
  eat.looping = false;
  backgroundSound = loadSound("sound/sound1.mp3");
- 
+ bunnySad = loadAnimation("images/sad_1.png","images/sad_2.png","images/sad_3.png");
+ bunnySad.looping = false;
 }
 
 function setup() 
@@ -62,22 +67,31 @@ function setup()
   // primeiro parâmetro é número de retangulos
   // o segundo é a posição inical da corda
   rope = new Rope(7, {x: 245, y:30});
+  rope2 = new Rope(5, {x: 50, y:20});
   //criando um corpo circular
   fruit = Bodies.circle(300, 300, 20);
   // adicionando o fruta a composição
   Composite.add(rope.body, fruit);
   // criando um objeto da classe link
   link = new Link(rope, fruit);
+  link2 = new Link(rope2, fruit);
   blink.frameDelay = 20;
   bunny = createSprite(400,420,40,40);
   bunny.addAnimation("piscando", blink);
   bunny.addAnimation("comendo", eat);
+  bunny.addAnimation("triste", bunnySad);
   bunny.scale = 0.2;
 
   cutBtn = createImg("./images/cut_btn.png");
   cutBtn.position(230, 20);
   cutBtn.size(50,50);
   cutBtn.mouseClicked(drop);
+
+  cutBtn2 = createImg("./images/cut_btn.png");
+  cutBtn2.position(45, 30);
+  cutBtn2.size(50,50);
+  cutBtn2.mouseClicked(drop2);
+  
   backgroundSound.play();
 
   // image -> img
@@ -119,6 +133,7 @@ function draw()
   ground.show();
   // aparecer a rope
   rope.show();
+  rope2.show();
   // atualizando a engine (motor)
   Engine.update(engine);
   // cria uma image de melancia
@@ -141,6 +156,14 @@ function draw()
     World.remove(world, fruit);
     fruit = null;
   }
+
+  if(collide(fruit,ground.body, 80)) {
+    // trocando a animação
+    bunny.changeAnimation("triste");
+    World.remove(world, fruit);
+    fruit = null;
+  }
+
   drawSprites();
 }
 
@@ -152,6 +175,15 @@ function drop() {
   link.detach();
   // null == nulo
   link = null;
+}
+
+function drop2() {
+  // quebrando a corda
+  rope2.break();
+  // tira a restrição
+  link2.detach();
+  // null == nulo
+  link2 = null;
 }
 
 // sprite.collide = do sprite
