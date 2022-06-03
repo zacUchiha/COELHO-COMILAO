@@ -42,7 +42,7 @@ function preload(){
 function setup() 
 {
   // espaço do jogo 
-  createCanvas(500,500);
+  createCanvas(windowWidth,windowHeight);
 
   // define a média de quadros
   frameRate(80);
@@ -128,7 +128,7 @@ function mute() {
 function draw() 
 {
   background(51);
-  image(backgroundImg,0,0,500,500);
+  image(backgroundImg,0,0,width,height);
   // aparecer o solo
   ground.show();
   // aparecer a rope
@@ -183,7 +183,7 @@ function drop2() {
   // tira a restrição
   link2.detach();
   // null == nulo
-  link2 = null;
+  link2  = null;
 }
 
 // sprite.collide = do sprite
